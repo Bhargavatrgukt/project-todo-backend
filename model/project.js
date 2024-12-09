@@ -38,7 +38,7 @@ export const updateProject = (id, name, color, isFavorite) => {
         reject(err);
       } else {
         console.log(`Rows affected: ${this.changes}`);
-        resolve();
+        resolve(this.changes);
       }
     });
   });
@@ -49,9 +49,9 @@ export const deleteProject = (id) => {
   return new Promise((resolve, reject) => {
     db.run(query, [id], function (err) {
       if (err) {
-        return nreject(err);
+        return reject(err);
       }
-      resolve();
+      resolve(this.changes);
     });
   });
 };
