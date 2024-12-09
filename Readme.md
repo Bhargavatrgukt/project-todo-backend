@@ -36,14 +36,6 @@ Detailed API documentation is available via Postman collections:
 
 ---
 
-## Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/todoist-clone.git
-   cd todoist-clone
-   ```
-
 The server will be available at `http://localhost:3000`.
 
 ## Endpoints
