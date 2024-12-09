@@ -1,4 +1,4 @@
-# Todoist Clone API
+# Todoist APIS
 
 This project is a RESTful API for a Todoist-like application, providing CRUD functionality for **Projects** and **Tasks**. It is built using **Express.js** and **SQLite3**.
 
