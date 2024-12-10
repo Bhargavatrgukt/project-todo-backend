@@ -1,21 +1,37 @@
 import sqlite3 from "sqlite3";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 
-// const databasePath = path.join(__dirname, "..", "todoDatabase.sqlite3");  //in es6 __dirname is not valid
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const db = new sqlite3.Database("./todoDatabase.sqlite3", (err) => {
+const databasePath = path.join(__dirname, "..", "todoDatabase.sqlite3");
+
+const db = new sqlite3.Database(databasePath, (err) => {
   if (err) {
     console.error(`Error in the database connection: ${err.message}`);
   } else {
     console.log("Database connected successfully!");
+
+    // Enable foreign key constraints
+    db.exec("PRAGMA foreign_keys = ON;", (err) => {
+      if (err) {
+        console.error("Error enabling foreign keys:", err.message);
+      } else {
+        console.log("Foreign keys enabled");
+      }
+    });
   }
 });
 
-const schema = fs.readFileSync("./database/schema.sql", "utf-8");
+const schemaPath = path.join(__dirname, "schema.sql");
+const schema = fs.readFileSync(schemaPath, "utf-8");
+
 db.exec(schema, (err) => {
   if (err) {
     console.error("Error creating tables", err);
+    process.exit(1); // Exit application on critical failure
   } else {
     console.log("Tables initialized");
   }

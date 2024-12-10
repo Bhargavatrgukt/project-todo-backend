@@ -1,10 +1,9 @@
 import * as Project from "../model/project.js";
 
 export const createProject = async (req, res) => {
-  const { name, color, isFavorite } = req.body;
-
+  const { name, color, is_favorite } = req.body;
   try {
-    const result = await Project.createProject(name, color, isFavorite);
+    const result = await Project.createProject(name, color, is_favorite);
     res.status(201).json({ id: result.lastID });
   } catch (err) {
     res.status(500).json({ error: err.message });
