@@ -1,10 +1,10 @@
 import db from "../database/db.js";
 
-export const createProject = (name, color, isFavorite) => {
+export const createProject = (name, color, is_favorite) => {
   const query =
     "INSERT INTO projects (name, color, is_favorite) VALUES (?, ?, ?)";
   return new Promise((resolve, reject) => {
-    db.run(query, [name, color, isFavorite], function (err) {
+    db.run(query, [name, color, is_favorite], function (err) {
       if (err) {
         reject(err);
       } else {
