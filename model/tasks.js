@@ -1,4 +1,5 @@
 import db from "../database/db.js";
+import dbRun from "./dbRun.js";
 
 export const createTask = (
   content,
@@ -9,19 +10,13 @@ export const createTask = (
 ) => {
   const query =
     "INSERT INTO tasks (content,description,due_date , is_completed ,project_id) VALUES (?, ?, ?,?,?)";
-  return new Promise((resolve, reject) => {
-    db.run(
-      query,
-      [content, description, due_date, is_completed || false, project_id],
-      function (err) {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(this);
-        }
-      }
-    );
-  });
+  return dbRun(query, [
+    content,
+    description,
+    due_date,
+    is_completed,
+    project_id,
+  ]);
 };
 
 export const getAllTasks = (project_id) => {
@@ -49,28 +44,16 @@ export const updateTask = (
       WHERE id = ?
     `;
 
-  return new Promise((resolve, reject) => {
-    db.run(
-      query,
-      [content, description, due_date, is_completed, task_id], // Correct parameter order
-      function (err) {
-        if (err) {
-          return reject(err);
-        }
-        resolve(this.changes);
-      }
-    );
-  });
+  return dbRun(query, [
+    content,
+    description,
+    due_date,
+    is_completed,
+    task_id,
+  ]).then((result) => result.changes);
 };
 
 export const deleteTask = (id) => {
   const query = `DELETE FROM tasks WHERE id=?`;
-  return new Promise((resolve, reject) => {
-    db.run(query, [id], function (err) {
-      if (err) {
-        return reject(err);
-      }
-      resolve(this.changes);
-    });
-  });
+  return dbRun(query, [id]).then((result) => result.changes);
 };
