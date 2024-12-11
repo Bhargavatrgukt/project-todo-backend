@@ -1,9 +1,30 @@
 import * as Task from "../model/tasks.js";
+import * as Yup from "yup";
+
+// Validation schema for tasks
+const taskSchema = Yup.object().shape({
+  content: Yup.string().required("Content is required"),
+  description: Yup.string().nullable(),
+  due_date: Yup.date().nullable(),
+  is_completed: Yup.boolean()
+    .nullable()
+    .typeError("is_completed is a  boolean"),
+});
+
+const validateRequest = async (req, res, schema) => {
+  try {
+    return await schema.validate({ ...req.body }, { abortEarly: false });
+  } catch (err) {
+    res.status(400).json({ message: "Validation failed", errors: err.errors });
+    throw new Error("Validation failed"); // Prevent further execution
+  }
+};
 
 export const createTask = async (req, res) => {
   try {
     const { project_id } = req.params;
-    const { content, description, due_date, is_completed } = req.body;
+    const { content, description, due_date, is_completed } =
+      await validateRequest(req, res, taskSchema);
     const result = await Task.createTask(
       content,
       description,
@@ -30,9 +51,9 @@ export const getAllTasks = async (req, res) => {
 
 export const updateTask = async (req, res) => {
   try {
-    const { id } = req.params; // Task ID
-    console.log(req.params);
-    const { content, description, due_date, is_completed } = req.body;
+    const { id } = req.params;
+    const { content, description, due_date, is_completed } =
+      await validateRequest(req, res, taskSchema);
 
     const change = await Task.updateTask(
       id,

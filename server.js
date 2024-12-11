@@ -9,9 +9,9 @@ const PORT = 3000;
 app.use(bodyParser.json());
 
 app.use("/api", projectRoutes);
-app.use("/api", taskRoutes);
+app.use("/api/projects", taskRoutes);
 
-app.get("/", (req, res) => res.send("This is a home page"));
+// app.get("/", (req, res) => res.send("This is a home page"));
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
