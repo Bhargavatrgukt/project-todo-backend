@@ -1,17 +1,10 @@
 import db from "../database/db.js";
+import dbRun from "./dbRun.js";
 
 export const createProject = (name, color, is_favorite) => {
   const query =
     "INSERT INTO projects (name, color, is_favorite) VALUES (?, ?, ?)";
-  return new Promise((resolve, reject) => {
-    db.run(query, [name, color, is_favorite], function (err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(this);
-      }
-    });
-  });
+  return dbRun(query, [name, color, is_favorite]);
 };
 
 export const getProjects = () => {
@@ -27,31 +20,17 @@ export const getProjects = () => {
   });
 };
 
-export const updateProject = (id, name, color, isFavorite) => {
+export const updateProject = (id, name, color, is_favorite) => {
   const query = `
         UPDATE projects
         SET name = ?, color = ?, is_favorite = ?
         WHERE id = ?`;
-  return new Promise((resolve, reject) => {
-    db.run(query, [id, name, color, isFavorite], function (err) {
-      if (err) {
-        reject(err);
-      } else {
-        console.log(`Rows affected: ${this.changes}`);
-        resolve(this.changes);
-      }
-    });
-  });
+  return dbRun(query, [name, color, is_favorite, id]).then(
+    (result) => result.changes
+  );
 };
 
 export const deleteProject = (id) => {
   const query = "DELETE FROM projects WHERE id = ?";
-  return new Promise((resolve, reject) => {
-    db.run(query, [id], function (err) {
-      if (err) {
-        return reject(err);
-      }
-      resolve(this.changes);
-    });
-  });
+  return dbRun(query, [id]).then((result) => result.changes);
 };

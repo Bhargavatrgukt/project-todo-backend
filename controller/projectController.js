@@ -43,14 +43,14 @@ export const getProjects = async (req, res) => {
 
 export const updateProject = async (req, res) => {
   try {
-    // const { id } = req.params;
+    const { id } = req.params;
     // const { name, color, isFavorite } = req.body;
     const { name, color, is_favorite } = await validateRequest(
       req,
       res,
       projectSchema
     );
-    const change = await Project.updateProject(id, name, color, isFavorite);
+    const change = await Project.updateProject(id, name, color, is_favorite);
     if (change === 0) {
       return res.status(204).send("no content");
     }
