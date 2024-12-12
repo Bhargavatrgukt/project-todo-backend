@@ -1,5 +1,6 @@
 import db from "../database/db.js";
 import dbRun from "./dbRun.js";
+// import { startOfDay, endOfDay } from "date-fns";
 
 export const createTask = (
   content,
@@ -19,10 +20,29 @@ export const createTask = (
   ]);
 };
 
-export const getAllTasks = (project_id) => {
-  const query = `select * from tasks where project_id=?`;
+export const getAllTasks = (project_id, due_date, is_completed, created_at) => {
+  let query = "SELECT * FROM tasks WHERE 1=1";
+  const params = [];
+
+  if (project_id) {
+    query += " AND project_id = ?";
+    params.push(project_id);
+  }
+  if (due_date) {
+    query += " AND due_date = ?";
+    params.push(due_date);
+  }
+
+  if (is_completed) {
+    query += " AND is_completed = ?";
+    params.push(is_completed === "true" ? 1 : 0);
+  }
+  if (created_at) {
+    query += " AND created_at >= ?";
+    params.push(created_at);
+  }
   return new Promise((resolve, reject) => {
-    db.all(query, [project_id], function (err, rows) {
+    db.all(query, params, function (err, rows) {
       if (err) {
         return reject(err);
       }

@@ -1,4 +1,4 @@
-import { faker } from "@faker-js/faker";
+// import { faker } from "@faker-js/faker";
 import db from "./db.js";
 
 // Generate users with unique emails
@@ -107,72 +107,94 @@ import db from "./db.js";
 // // Call the function to insert users and projects
 // insertUsers();
 
-const generateTask = () => {
-  // id INTEGER PRIMARY KEY AUTOINCREMENT,
-  //   content TEXT NOT NULL,
-  //   description TEXT,
-  //   due_date DATE,
-  //   is_completed BOOLEAN DEFAULT FALSE,
-  //   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  //   project_id INTEGER,
-  let tasks = [];
-  for (let i = 9000001; i <= 10000000; i++) {
-    let obj = {
-      content: `content-${i}`,
-      description: faker.food.description(),
-      due_date: faker.date.future({ years: 1 }),
-      is_completed: faker.datatype.boolean(),
-      project_id: faker.number.int({ min: 1, max: 1000000 }),
-    };
-    console.log(obj);
-    tasks.push(obj);
-  }
-  return tasks;
-};
+// const generateTask = () => {
+//   // id INTEGER PRIMARY KEY AUTOINCREMENT,
+//   //   content TEXT NOT NULL,
+//   //   description TEXT,
+//   //   due_date DATE,
+//   //   is_completed BOOLEAN DEFAULT FALSE,
+//   //   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+//   //   project_id INTEGER,
+//   let tasks = [];
+//   for (let i = 9000001; i <= 10000000; i++) {
+//     let obj = {
+//       content: `content-${i}`,
+//       description: faker.food.description(),
+//       due_date: faker.date.future({ years: 1 }),
+//       is_completed: faker.datatype.boolean(),
+//       project_id: faker.number.int({ min: 1, max: 1000000 }),
+//     };
+//     console.log(obj);
+//     tasks.push(obj);
+//   }
+//   return tasks;
+// };
 
-const insertTasks = () => {
-  const users = generateTask();
-  const query =
-    "INSERT INTO tasks (content, description, due_date, is_completed, project_id) VALUES (?, ?,?,?,?)";
+// const insertTasks = () => {
+//   const users = generateTask();
+//   const query =
+//     "INSERT INTO tasks (content, description, due_date, is_completed, project_id) VALUES (?, ?,?,?,?)";
 
-  db.serialize(() => {
-    db.run("BEGIN TRANSACTION", (err) => {
-      if (err) {
-        console.error("Error starting transaction for users:", err.message);
-        return;
-      }
+//   db.serialize(() => {
+//     db.run("BEGIN TRANSACTION", (err) => {
+//       if (err) {
+//         console.error("Error starting transaction for users:", err.message);
+//         return;
+//       }
 
-      users.forEach((task) => {
-        db.run(
-          query,
-          [
-            task.content,
-            task.description,
-            task.due_date,
-            task.is_completed,
-            task.project_id,
-          ],
-          (err) => {
-            if (err) {
-              console.error(`Error inserting task: ${err.message}`);
-              return;
-            }
-          }
-        );
-      });
+//       users.forEach((task) => {
+//         db.run(
+//           query,
+//           [
+//             task.content,
+//             task.description,
+//             task.due_date,
+//             task.is_completed,
+//             task.project_id,
+//           ],
+//           (err) => {
+//             if (err) {
+//               console.error(`Error inserting task: ${err.message}`);
+//               return;
+//             }
+//           }
+//         );
+//       });
 
-      db.run("COMMIT", (err) => {
-        if (err) {
-          console.error("Error committing transaction for tasks:", err.message);
-          db.run("ROLLBACK");
-        } else {
-          console.log("Tasks inserted successfully!");
-          // Call insertProjects after users are successfully inserted
-          // insertProjects();
-        }
-      });
-    });
-  });
-};
+//       db.run("COMMIT", (err) => {
+//         if (err) {
+//           console.error("Error committing transaction for tasks:", err.message);
+//           db.run("ROLLBACK");
+//         } else {
+//           console.log("Tasks inserted successfully!");
+//           // Call insertProjects after users are successfully inserted
+//           // insertProjects();
+//         }
+//       });
+//     });
+//   });
+// };
 
-insertTasks();
+// insertTasks();
+
+// const query = `
+//   UPDATE tasks
+//   SET due_date = date(due_date / 1000, 'unixepoch');
+// `;
+
+// db.run(query, [], function (err) {
+//   if (err) {
+//     console.error("Error updating tasks:", err.message);
+//   } else {
+//     console.log("Tasks updated successfully!");
+
+//     // After updating, retrieve the first 100 rows to verify the update
+//     db.all("SELECT * FROM tasks LIMIT 100", [], (err, rows) => {
+//       if (err) {
+//         console.error("Error fetching tasks:", err.message);
+//       } else {
+//         console.log("Fetched tasks:", rows);
+//       }
+//     });
+//   }
+// });

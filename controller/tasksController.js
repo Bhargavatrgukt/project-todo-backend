@@ -40,8 +40,14 @@ export const createTask = async (req, res) => {
 
 export const getAllTasks = async (req, res) => {
   try {
+    const { due_date, is_completed, created_at } = req.query;
     const { project_id } = req.params;
-    const rows = await Task.getAllTasks(project_id);
+    const rows = await Task.getAllTasks(
+      project_id,
+      due_date,
+      is_completed,
+      created_at
+    );
     res.status(200).json(rows);
   } catch (error) {
     console.log(error.message);
