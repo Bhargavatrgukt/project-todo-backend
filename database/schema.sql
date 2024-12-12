@@ -1,6 +1,7 @@
 -- DROP TABLE IF EXISTS tasks;
 -- DROP TABLE IF EXISTS projects;
 -- DROP TABLE IF EXISTS users;
+-- DROP TABLE IF EXISTS comments;
 -- Create `projects` table
 CREATE TABLE IF NOT EXISTS projects (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,4 +26,23 @@ CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL
+);
+CREATE TABLE IF NOT EXISTS comments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    content TEXT NOT NULL,
+    posted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    task_id INTEGER,
+    project_id INTEGER,
+    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
+    FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
+    CHECK (
+        (
+            task_id IS NOT NULL
+            AND project_id IS NULL
+        )
+        OR (
+            task_id IS NULL
+            AND project_id IS NOT NULL
+        )
+    )
 );
