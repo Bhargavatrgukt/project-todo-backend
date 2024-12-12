@@ -1,9 +1,14 @@
+-- DROP TABLE IF EXISTS tasks;
+-- DROP TABLE IF EXISTS projects;
+-- DROP TABLE IF EXISTS users;
 -- Create `projects` table
 CREATE TABLE IF NOT EXISTS projects (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    color TEXT NOT NULL,
-    is_favorite BOOLEAN DEFAULT FALSE
+    color TEXT,
+    is_favorite BOOLEAN DEFAULT FALSE,
+    user_id INTEGER NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 -- Create `tasks` table
 CREATE TABLE IF NOT EXISTS tasks (
@@ -15,4 +20,9 @@ CREATE TABLE IF NOT EXISTS tasks (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     project_id INTEGER,
     FOREIGN KEY (project_id) REFERENCES projects (id) ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL
 );

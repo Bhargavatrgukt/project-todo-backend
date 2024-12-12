@@ -3,8 +3,8 @@ import * as Yup from "yup";
 
 const projectSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
-  color: Yup.string().required("Color is required"),
-  is_favorite: Yup.boolean().required("is_favorite is required"),
+  color: Yup.string().nullable(),
+  is_favorite: Yup.boolean().nullable(),
 });
 
 const validateRequest = async (req, res, schema) => {
@@ -33,7 +33,7 @@ export const createProject = async (req, res) => {
 export const getProjects = async (req, res) => {
   try {
     const rows = await Project.getProjects();
-    // console.log(rows);
+    console.log(rows);
     res.status(200).json(rows);
   } catch (error) {
     console.log(error.message);
