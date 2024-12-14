@@ -41,6 +41,7 @@ export const getAllTasks = (project_id, due_date, is_completed, created_at) => {
     query += " AND created_at >= ?";
     params.push(created_at);
   }
+  query += " limit 10";
   return new Promise((resolve, reject) => {
     db.all(query, params, function (err, rows) {
       if (err) {
