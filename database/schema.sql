@@ -33,6 +33,8 @@ CREATE TABLE IF NOT EXISTS comments (
     posted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     task_id INTEGER,
     project_id INTEGER,
+    user_id INTEGER,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
     CHECK (
