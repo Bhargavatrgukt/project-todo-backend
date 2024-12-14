@@ -5,16 +5,16 @@ import {
   getAllTasks,
   updateTask,
 } from "../controller/tasksController.js";
-import { validateProjectExists } from "../middleware/validProject.js";
+import { validateRequest } from "../middleware/requestValidations.js";
 
 const router = express.Router();
 
-router.post("/:project_id/tasks", validateProjectExists, createTask);
+router.post("/tasks", validateRequest, createTask);
 
-router.get("/:project_id/tasks", validateProjectExists, getAllTasks);
+router.get("/tasks", getAllTasks);
 
-router.put("/:project_id/tasks/:id", validateProjectExists, updateTask);
+router.put("/tasks/:id", validateRequest, updateTask);
 
-router.delete("/:project_id/tasks/:id", validateProjectExists, deleteTask);
+router.delete("/tasks/:id", deleteTask);
 
 export default router;
