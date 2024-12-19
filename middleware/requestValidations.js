@@ -1,14 +1,26 @@
 import * as Yup from "yup";
 
+const getAllTasksSchema = Yup.object().shape({
+  project_id: Yup.number()
+    .integer("Project ID must be an integer")
+    .min(0, "Project ID must be a non-negative integer")
+    .nullable(),
+  due_date: Yup.string()
+    .matches(/^\d{4}-\d{2}-\d{2}$/, "Due date must be in YYYY-MM-DD format")
+    .nullable(),
+  is_completed: Yup.string()
+    .oneOf(["true", "false"], "is_completed must be 'true' or 'false'")
+    .nullable(),
+  created_at: Yup.date()
+    .typeError("Created at must be a valid date")
+    .nullable(),
+});
+
 // Define shared schema for tasks and comments
-const taskAndCommentSchema = Yup.object()
+const commentSchema = Yup.object()
   .shape({
     content: Yup.string().required("Content is required"),
     description: Yup.string().nullable(),
-    due_date: Yup.date().nullable(),
-    is_completed: Yup.boolean()
-      .nullable()
-      .typeError("is_completed must be a boolean"),
     user_id: Yup.number()
       .integer()
       .required("User ID is required")
@@ -21,6 +33,16 @@ const taskAndCommentSchema = Yup.object()
     "Either task_id or project_id must be provided",
     (value) => value.task_id || value.project_id // Ensure either task_id or project_id is present
   );
+
+const taskSchema = Yup.object().shape({
+  content: Yup.string().required("Content is required"),
+  description: Yup.string().nullable(),
+  due_date: Yup.date().nullable(),
+  is_completed: Yup.boolean()
+    .nullable()
+    .typeError("is_completed must be a boolean"),
+  project_id: Yup.number().integer().nullable(),
+});
 
 const schemas = {
   projects: {
@@ -39,12 +61,13 @@ const schemas = {
     }),
   },
   tasks: {
-    POST: taskAndCommentSchema, // Reuse the same schema for POST
-    PUT: taskAndCommentSchema, // Reuse the same schema for PUT
+    POST: taskSchema, // Reuse the same schema for POST
+    PUT: taskSchema, // Reuse the same schema for PUT
+    GET: getAllTasksSchema,
   },
   comments: {
-    POST: taskAndCommentSchema, // Reuse the same schema for POST
-    PUT: taskAndCommentSchema, // Reuse the same schema for PUT
+    POST: commentSchema, // Reuse the same schema for POST
+    PUT: commentSchema, // Reuse the same schema for PUT
   },
 };
 
