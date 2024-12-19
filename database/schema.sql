@@ -48,3 +48,7 @@ CREATE TABLE IF NOT EXISTS comments (
         )
     )
 );
+-- ALTER TABLE users
+-- ADD COLUMN password TEXT NOT NULL DEFAULT 'default_password';
+-- ALTER TABLE users
+-- ADD COLUMN gender TEXT CHECK(gender IN ('male', 'female', 'other')) DEFAULT 'other';
