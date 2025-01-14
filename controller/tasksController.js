@@ -1,17 +1,9 @@
 import * as Task from "../model/tasks.js";
-import { asyncHandler } from "../middleware/asyncHandler.js"; // Assuming asyncHandler is in middlewares folder
-
+import { asyncHandler } from "../middleware/asyncHandler.js";
 // Create Task
 export const createTask = asyncHandler(async (req, res) => {
-  const { project_id } = req.params;
-  const { content, description, due_date, is_completed } = req.body;
-  const result = await Task.createTask(
-    content,
-    description,
-    due_date,
-    is_completed,
-    project_id
-  );
+  const { content, description, project_id } = req.body;
+  const result = await Task.createTask(content, description, project_id);
   res.status(201).json({ id: result.lastID });
 });
 

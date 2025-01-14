@@ -41,7 +41,7 @@ const taskSchema = Yup.object().shape({
   is_completed: Yup.boolean()
     .nullable()
     .typeError("is_completed must be a boolean"),
-  project_id: Yup.number().integer().nullable(),
+  project_id: Yup.number().integer().required(),
 });
 
 const schemas = {
@@ -50,9 +50,6 @@ const schemas = {
       name: Yup.string().required("Name is required"),
       color: Yup.string().nullable(),
       is_favorite: Yup.boolean().nullable(),
-      user_id: Yup.number()
-        .integer("User ID must be an integer")
-        .required("User ID is required"),
     }),
     PUT: Yup.object().shape({
       name: Yup.string().required("Name is required"),

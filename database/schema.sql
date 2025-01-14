@@ -1,15 +1,13 @@
--- DROP TABLE IF EXISTS tasks;
--- DROP TABLE IF EXISTS projects;
--- DROP TABLE IF EXISTS users;
 -- DROP TABLE IF EXISTS comments;
+-- DROP TABLE IF EXISTS tasks;
+-- DROP TABLE IF EXISTS users;
+-- DROP TABLE IF EXISTS projects;
 -- Create `projects` table
 CREATE TABLE IF NOT EXISTS projects (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     color TEXT,
-    is_favorite BOOLEAN DEFAULT FALSE,
-    user_id INTEGER NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    is_favorite BOOLEAN DEFAULT FALSE
 );
 -- Create `tasks` table
 CREATE TABLE IF NOT EXISTS tasks (
@@ -22,11 +20,13 @@ CREATE TABLE IF NOT EXISTS tasks (
     project_id INTEGER,
     FOREIGN KEY (project_id) REFERENCES projects (id) ON DELETE CASCADE
 );
+-- Create `users` table
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL
 );
+-- Create `comments` table
 CREATE TABLE IF NOT EXISTS comments (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     content TEXT NOT NULL,
@@ -48,7 +48,3 @@ CREATE TABLE IF NOT EXISTS comments (
         )
     )
 );
--- ALTER TABLE users
--- ADD COLUMN password TEXT NOT NULL DEFAULT 'default_password';
--- ALTER TABLE users
--- ADD COLUMN gender TEXT CHECK(gender IN ('male', 'female', 'other')) DEFAULT 'other';

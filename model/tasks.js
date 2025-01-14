@@ -2,22 +2,10 @@ import db from "../database/db.js";
 import dbRun from "./dbRun.js";
 // import { startOfDay, endOfDay } from "date-fns";
 
-export const createTask = (
-  content,
-  description,
-  due_date,
-  is_completed,
-  project_id
-) => {
+export const createTask = (content, description, project_id) => {
   const query =
-    "INSERT INTO tasks (content,description,due_date , is_completed ,project_id) VALUES (?, ?, ?,?,?)";
-  return dbRun(query, [
-    content,
-    description,
-    due_date,
-    is_completed,
-    project_id,
-  ]);
+    "INSERT INTO tasks (content,description,project_id) VALUES (?, ?, ?)";
+  return dbRun(query, [content, description, project_id]);
 };
 
 export const getAllTasks = (project_id, due_date, is_completed, created_at) => {

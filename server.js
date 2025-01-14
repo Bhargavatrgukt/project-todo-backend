@@ -6,6 +6,7 @@ import projectRoutes from "./route/projectRoute.js";
 import taskRoutes from "./route/taskRoutes.js";
 import commentRoutes from "./route/commetRoute.js";
 import userRoutes from "./route/userRoute.js";
+import cors from "cors";
 
 import logger from "./utility/logger.js";
 import morgan from "morgan";
@@ -15,6 +16,7 @@ const app = express();
 dotenv.config();
 const port = process.env.PORT || 4000;
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
 
@@ -56,15 +58,13 @@ app.use((err, req, res, next) => {
 // Catch unhandled promise rejections
 process.on("unhandledRejection", (reason, promise) => {
   console.error("Unhandled Rejection at:", promise, "reason:", reason);
-  // Optionally log or take further actions like sending alerts
-  process.exit(1); // Optional: exit the process
+  process.exit(1);
 });
 
 // Catch uncaught exceptions
 process.on("uncaughtException", (error) => {
   console.error("Uncaught Exception thrown:", error);
-  // Optionally log or take further actions like sending alerts
-  process.exit(1); // Optional: exit the process
+  process.exit(1);
 });
 
 app.listen(port, () => {

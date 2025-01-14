@@ -2,9 +2,10 @@ import * as Project from "../model/project.js";
 import { asyncHandler } from "../middleware/asyncHandler.js";
 
 export const createProject = asyncHandler(async (req, res) => {
-  const { name, color, is_favorite, user_id } = req.body;
-  const result = await Project.createProject(name, color, is_favorite, user_id);
-  res.status(201).json({ id: result.lastID });
+  const { name, color, is_favorite } = req.body;
+  const result = await Project.createProject(name, color, is_favorite);
+  res.status(201).json(result);
+  console.log(result);
 });
 
 export const getProjects = asyncHandler(async (req, res) => {

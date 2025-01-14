@@ -30,7 +30,6 @@ export const userSignup = asyncHandler(async (req, res) => {
 // User Login
 export const userLogin = asyncHandler(async (req, res) => {
   const { name, password } = req.body;
-
   // Check if user exists
   const user = await User.getUserByUsername(name);
   if (!user || user.length === 0) {
