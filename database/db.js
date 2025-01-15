@@ -6,7 +6,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const databasePath = path.join(__dirname, "..", "todoDatabase.sqlite3");
+const databasePath = path.join(__dirname, "store", "todoDatabase.sqlite3");
 
 const db = new sqlite3.Database(databasePath, (err) => {
   if (err) {

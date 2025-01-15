@@ -25,4 +25,4 @@ logs
 # Environment variables
 .env*
 
-todoDatabase.sqlite3
+store/
