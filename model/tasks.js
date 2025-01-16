@@ -20,9 +20,15 @@ export const createTask = (
   ]);
 };
 
-export const getAllTasks = (project_id, due_date, is_completed, created_at) => {
-  let query = "SELECT * FROM tasks WHERE 1=1";
-  const params = [];
+export const getAllTasks = (
+  project_id,
+  due_date,
+  is_completed,
+  created_at,
+  user_id
+) => {
+  let query = "SELECT * FROM tasks WHERE user_id=?";
+  const params = [user_id];
 
   if (project_id) {
     query += " AND project_id = ?";
@@ -41,12 +47,14 @@ export const getAllTasks = (project_id, due_date, is_completed, created_at) => {
     query += " AND created_at >= ?";
     params.push(created_at);
   }
-  query += " limit 10";
+  console.log(params);
+  // query += " limit 10";
   return new Promise((resolve, reject) => {
     db.all(query, params, function (err, rows) {
       if (err) {
         return reject(err);
       }
+      console.log(rows);
       resolve(rows);
     });
   });

@@ -50,9 +50,7 @@ const schemas = {
       name: Yup.string().required("Name is required"),
       color: Yup.string().nullable(),
       is_favorite: Yup.boolean().nullable(),
-      user_id: Yup.number()
-        .integer("User ID must be an integer")
-        .required("User ID is required"),
+      user_id: Yup.number().integer("User ID must be an integer").nullable(),
     }),
     PUT: Yup.object().shape({
       name: Yup.string().required("Name is required"),
@@ -73,7 +71,8 @@ const schemas = {
 
 // Middleware to validate the request body
 export const validateRequest = async (req, res, next) => {
-  const resource = req.path.split("/")[1];
+  const resource = req.baseUrl.split("/").pop();
+  console.log(resource);
   const method = req.method;
   const schema = schemas[resource]?.[method];
   if (!schema) {

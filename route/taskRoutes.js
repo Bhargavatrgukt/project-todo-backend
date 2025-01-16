@@ -10,14 +10,14 @@ import authenticationToken from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.use(authenticationToken);
+// router.use(authenticationToken);
 
-router.post("/tasks", validateRequest, createTask);
+router.post("/", validateRequest, createTask);
 
-router.get("/tasks", getAllTasks);
+router.get("/", getAllTasks);
 
-router.put("/tasks/:id", validateRequest, updateTask);
+router.put("/:id", validateRequest, updateTask);
 
-router.delete("/tasks/:id", deleteTask);
+router.delete("/:id", deleteTask);
 
 export default router;

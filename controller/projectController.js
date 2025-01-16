@@ -2,13 +2,15 @@ import * as Project from "../model/project.js";
 import { asyncHandler } from "../middleware/asyncHandler.js";
 
 export const createProject = asyncHandler(async (req, res) => {
-  const { name, color, is_favorite, user_id } = req.body;
+  const { name, color, is_favorite } = req.body;
+  const user_id = req.user_id;
   const result = await Project.createProject(name, color, is_favorite, user_id);
   res.status(201).json({ id: result.lastID });
 });
 
 export const getProjects = asyncHandler(async (req, res) => {
-  const rows = await Project.getProjects();
+  const user_id = req.user_id;
+  const rows = await Project.getProjects(user_id);
   res.status(200).json(rows);
 });
 

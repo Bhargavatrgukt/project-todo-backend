@@ -5,9 +5,8 @@ dotenv.config();
 
 const authenticationToken = (request, response, next) => {
   const jwtToken = request.cookies?.authToken; // Retrieve the token from cookies
-
   if (!jwtToken) {
-    response.status(401).send("Invalid JWT Token");
+    response.status(401).send("No JWT Token");
     return;
   }
 
@@ -15,7 +14,7 @@ const authenticationToken = (request, response, next) => {
     if (error) {
       response.status(401).send("Invalid JWT Token");
     } else {
-      request.username = payload.username; // Set the username from the token payload
+      request.user_id = payload.id;
       next(); // Proceed to the next middleware or route handler
     }
   });

@@ -6,6 +6,7 @@ import projectRoutes from "./route/projectRoute.js";
 import taskRoutes from "./route/taskRoutes.js";
 import commentRoutes from "./route/commetRoute.js";
 import userRoutes from "./route/userRoute.js";
+import authenticationToken from "./middleware/auth.js";
 
 import logger from "./utility/logger.js";
 import morgan from "morgan";
@@ -36,10 +37,10 @@ app.use(
   })
 );
 
-app.use("/app", projectRoutes);
-app.use("/app", taskRoutes);
+app.use("/app/projects", authenticationToken, projectRoutes);
+app.use("/app/tasks", authenticationToken, taskRoutes);
 
-app.use("/app", commentRoutes);
+app.use("/app/comments", authenticationToken, commentRoutes);
 app.use("/app", userRoutes);
 
 app.use((err, req, res, next) => {

@@ -17,13 +17,14 @@ export const createTask = asyncHandler(async (req, res) => {
 
 // Get All Tasks
 export const getAllTasks = asyncHandler(async (req, res) => {
-  const { due_date, is_completed, created_at } = req.query;
-  const { project_id } = req.params;
+  const user_id = req.user_id;
+  const { project_id, due_date, is_completed, created_at } = req.query;
   const rows = await Task.getAllTasks(
     project_id,
     due_date,
     is_completed,
-    created_at
+    created_at,
+    user_id
   );
   res.status(200).json(rows);
 });

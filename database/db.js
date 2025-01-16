@@ -6,7 +6,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const databasePath = path.join(__dirname, "..", "todoDatabase.sqlite3");
+const databasePath = path.join(__dirname, "../store", "todoDatabase.sqlite3");
 
 const db = new sqlite3.Database(databasePath, (err) => {
   if (err) {
@@ -30,8 +30,8 @@ const schema = fs.readFileSync(schemaPath, "utf-8");
 
 db.exec(schema, (err) => {
   if (err) {
-    console.error("Error creating tables", err);
-    process.exit(1); // Exit application on critical failure
+    console.error(`Error in database connection: ${err.message}`);
+    process.exit(1);
   } else {
     console.log("Tables initialized");
   }

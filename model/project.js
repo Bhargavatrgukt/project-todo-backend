@@ -7,10 +7,10 @@ export const createProject = (name, color, is_favorite, user_id) => {
   return dbRun(query, [name, color, is_favorite, user_id]);
 };
 
-export const getProjects = () => {
-  const query = "SELECT * FROM projects limit 20";
+export const getProjects = (user_id) => {
+  const query = "SELECT * FROM projects where user_id=?";
   return new Promise((resolve, reject) => {
-    db.all(query, [], (err, rows) => {
+    db.all(query, [user_id], (err, rows) => {
       if (err) {
         reject(err);
       } else {

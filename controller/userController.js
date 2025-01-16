@@ -6,12 +6,12 @@ import { asyncHandler } from "../middleware/asyncHandler.js";
 //user signup
 
 export const userSignup = asyncHandler(async (req, res) => {
-  const { name, email, password, gender } = req.body;
+  const { name, email, password } = req.body;
 
   // Check if user already exists
-  const existingUser = await User.getUserByUsername(name);
+  const existingUser = await User.getUserByUserMail(email);
   if (existingUser && existingUser.length > 0) {
-    res.status(400).json({ message: "User already exists" });
+    res.status(400).json({ message: "User email already exists" });
     return;
   }
 
@@ -23,32 +23,30 @@ export const userSignup = asyncHandler(async (req, res) => {
 
   // Hash password and save user
   const hashedPassword = await bcrypt.hash(password, 10);
-  await User.createUser(name, email, hashedPassword, gender); // Use hashedPassword
+  await User.createUser(name, email, hashedPassword); // Use hashedPassword
   res.status(201).json({ message: "User created successfully" });
 });
 
 // User Login
 export const userLogin = asyncHandler(async (req, res) => {
-  const { name, password } = req.body;
+  const { email, password } = req.body;
 
   // Check if user exists
-  const user = await User.getUserByUsername(name);
-  if (!user || user.length === 0) {
+  const user = await User.getUserByUserMail(email);
+  if (!user) {
     res.status(400).json({ message: "Invalid user" });
     return;
   }
 
-  const userData = Array.isArray(user) ? user[0] : user; // Adjust for your DB response
-
-  const isPasswordValid = await bcrypt.compare(password, userData.password);
+  const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) {
     res.status(400).json({ message: "Invalid password" });
     return;
   }
 
   // Generate JWT token
-  const payload = { username: userData.name }; // Adjust key based on your schema
-  const token = jwt.sign(payload, process.env.SECRET_KEY || "defaultSecret"); // Add fallback for SECRET_KEY
+  const payload = { id: user.id };
+  const token = jwt.sign(payload, process.env.SECRET_KEY || "defaultSecret");
   res.cookie("authToken", token);
   res.status(200).json({ message: "Login successful", token });
 });
