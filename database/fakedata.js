@@ -22,7 +22,7 @@ const insertUsers = (count) => {
     db.serialize(async () => {
       const query = `INSERT INTO users (name, email,password) VALUES (?, ?,?)`;
       const hashedPassword = await bcrypt.hash("password", 10);
-      for (let i = 1; i < count + 1; i++) {
+      for (let i = 101; i < count + 1; i++) {
         db.run(
           query,
           [`User${i}`, `user${i}@gmail.com`, hashedPassword],
@@ -55,7 +55,7 @@ const insertProjects = (count) => {
             colorPalette[Math.floor(Math.random() * colorPalette.length)]
               .dataValue,
             i % 2 === 0,
-            faker.number.int({ min: 1, max: 100 })
+            faker.number.int({ min: 1, max: 1000 })
           ); // 100 Users
 
           placeholders.push("(?, ?, ?, ?)");
@@ -90,7 +90,7 @@ const insertTasks = (count) => {
           values.push(
             `Task Content ${i}`,
             faker.number.int({ min: 1, max: 1000000 }),
-            faker.number.int({ min: 1, max: 1000000 })
+            faker.number.int({ min: 1, max: 1000 })
           );
           placeholders.push("(?, ?,?)");
         }
@@ -129,7 +129,7 @@ const insertComments = (count) => {
               : null, // 1 million projects
             isProjectComment
               ? null
-              : faker.datatype.number({ min: 1, max: 10000000 }) // 10 million tasks
+              : faker.datatype.number({ min: 1, max: 100 })
           );
           placeholders.push("(?, ?, ?)");
         }
@@ -151,9 +151,9 @@ const seedDatabase = async () => {
   try {
     console.log("Seeding database...");
 
-    // await insertUsers(100); // 100 Users
+    // await insertUsers(1000); // 1000 Users
     // await insertProjects(1000000); // 10,00,000 Projects
-    await insertTasks(10000000); // 1,00,00,000 Tasks
+    // await insertTasks(10000000); // 1,00,00,000 Tasks
     // await insertComments(10000);
 
     console.log("Seeding completed!");

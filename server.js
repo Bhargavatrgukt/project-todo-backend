@@ -7,6 +7,7 @@ import taskRoutes from "./route/taskRoutes.js";
 import commentRoutes from "./route/commetRoute.js";
 import userRoutes from "./route/userRoute.js";
 import authenticationToken from "./middleware/auth.js";
+import cors from "cors";
 
 import logger from "./utility/logger.js";
 import morgan from "morgan";
@@ -16,6 +17,7 @@ const app = express();
 dotenv.config();
 const port = process.env.PORT || 4000;
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
 

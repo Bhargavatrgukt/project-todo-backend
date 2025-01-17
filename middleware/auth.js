@@ -4,11 +4,12 @@ import jwt from "jsonwebtoken";
 dotenv.config();
 
 const authenticationToken = (request, response, next) => {
-  const jwtToken = request.cookies?.authToken; // Retrieve the token from cookies
-  if (!jwtToken) {
-    response.status(401).send("No JWT Token");
-    return;
+  const authHeader = request.headers.authorization;
+  if (!authHeader) {
+    return response.status(401).send("No JWT Token");
   }
+
+  const jwtToken = authHeader.split(" ")[1];
 
   jwt.verify(jwtToken, process.env.SECRET_KEY, (error, payload) => {
     if (error) {

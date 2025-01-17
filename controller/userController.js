@@ -10,7 +10,7 @@ export const userSignup = asyncHandler(async (req, res) => {
 
   // Check if user already exists
   const existingUser = await User.getUserByUserMail(email);
-  if (existingUser && existingUser.length > 0) {
+  if (existingUser) {
     res.status(400).json({ message: "User email already exists" });
     return;
   }
@@ -23,8 +23,11 @@ export const userSignup = asyncHandler(async (req, res) => {
 
   // Hash password and save user
   const hashedPassword = await bcrypt.hash(password, 10);
-  await User.createUser(name, email, hashedPassword); // Use hashedPassword
-  res.status(201).json({ message: "User created successfully" });
+  const user = await User.createUser(name, email, hashedPassword); // Use hashedPassword
+  const payload = { id: user.lastID };
+  const token = jwt.sign(payload, process.env.SECRET_KEY || "defaultSecret");
+  res.cookie("authToken", token);
+  res.status(201).json({ message: "User created successfully", token });
 });
 
 // User Login
