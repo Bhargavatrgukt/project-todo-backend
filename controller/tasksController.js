@@ -3,16 +3,15 @@ import { asyncHandler } from "../middleware/asyncHandler.js"; // Assuming asyncH
 
 // Create Task
 export const createTask = asyncHandler(async (req, res) => {
-  const { project_id } = req.params;
-  const { content, description, due_date, is_completed } = req.body;
+  const user_id = req.user_id;
+  const { content, description, project_id } = req.body;
   const result = await Task.createTask(
     content,
     description,
-    due_date,
-    is_completed,
-    project_id
+    project_id,
+    user_id
   );
-  res.status(201).json({ id: result.lastID });
+  res.status(201).json({ id: Number(result.lastInsertRowid) });
 });
 
 // Get All Tasks
@@ -32,15 +31,9 @@ export const getAllTasks = asyncHandler(async (req, res) => {
 // Update Task
 export const updateTask = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { content, description, due_date, is_completed } = req.body;
+  const { content, description } = req.body;
 
-  const change = await Task.updateTask(
-    id,
-    content,
-    description,
-    due_date,
-    is_completed
-  );
+  const change = await Task.updateTask(id, content, description);
 
   if (change === 0) {
     return res.status(204).send("No content"); // No rows updated

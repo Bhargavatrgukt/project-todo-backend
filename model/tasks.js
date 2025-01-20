@@ -2,25 +2,15 @@ import db from "../database/db.js";
 import dbRun from "./dbRun.js";
 // import { startOfDay, endOfDay } from "date-fns";
 
-export const createTask = (
-  content,
-  description,
-  due_date,
-  is_completed,
-  project_id
-) => {
+export const createTask = (content, description, project_id, user_id) => {
   const query =
-    "INSERT INTO tasks (content,description,due_date , is_completed ,project_id) VALUES (?, ?, ?,?,?)";
-  return dbRun(query, [
-    content,
-    description,
-    due_date,
-    is_completed,
-    project_id,
-  ]);
+    "INSERT INTO tasks (content,description,project_id,user_id) VALUES (?, ?, ?,?)";
+  console.log("Parameters:", { content, description, project_id, user_id });
+
+  return dbRun(query, [content, description, project_id, user_id]);
 };
 
-export const getAllTasks = (
+export const getAllTasks = async (
   project_id,
   due_date,
   is_completed,
@@ -47,39 +37,29 @@ export const getAllTasks = (
     query += " AND created_at >= ?";
     params.push(created_at);
   }
-  console.log(params);
+
   // query += " limit 10";
-  return new Promise((resolve, reject) => {
-    db.all(query, params, function (err, rows) {
-      if (err) {
-        return reject(err);
-      }
-      console.log(rows);
-      resolve(rows);
+  try {
+    const tasks = await db.execute({
+      sql: query,
+      args: params,
     });
-  });
+    return tasks.rows;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
-export const updateTask = (
-  task_id,
-  content,
-  description,
-  due_date,
-  is_completed
-) => {
+export const updateTask = (task_id, content, description) => {
   const query = `
       UPDATE tasks 
-      SET content = ?, description = ?, due_date = ?, is_completed = ?
+      SET content = ?, description = ?
       WHERE id = ?
     `;
 
-  return dbRun(query, [
-    content,
-    description,
-    due_date,
-    is_completed,
-    task_id,
-  ]).then((result) => result.changes);
+  return dbRun(query, [content, description, task_id]).then(
+    (result) => result.changes
+  );
 };
 
 export const deleteTask = (id) => {

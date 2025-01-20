@@ -3,19 +3,20 @@ import dbRun from "./dbRun.js";
 
 // Get User by Username
 export const getUserByUserMail = async (email) => {
-  const query = "SELECT * FROM users WHERE  email = ?";
-  return new Promise((resolve, reject) => {
-    db.get(query, [email], function (err, row) {
-      if (err) {
-        return reject(err);
-      }
-      resolve(row);
+  try {
+    const query = "SELECT * FROM users WHERE  email = ?";
+    const result = await db.execute({
+      sql: query,
+      args: [email],
     });
-  });
+    return result.rows;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 // Create User
-export const createUser = async (name, email, password, gender) => {
+export const createUser = async (name, email, password) => {
   const query = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
-  return dbRun(query, [name, email, password, gender]);
+  return dbRun(query, [name, email, password]);
 };

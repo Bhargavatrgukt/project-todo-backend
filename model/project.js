@@ -7,17 +7,17 @@ export const createProject = (name, color, is_favorite, user_id) => {
   return dbRun(query, [name, color, is_favorite, user_id]);
 };
 
-export const getProjects = (user_id) => {
-  const query = "SELECT * FROM projects where user_id=?";
-  return new Promise((resolve, reject) => {
-    db.all(query, [user_id], (err, rows) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(rows);
-      }
+export const getProjects = async (user_id) => {
+  try {
+    const query = "SELECT * FROM projects where user_id=?";
+    const projects = await db.execute({
+      sql: query,
+      args: [user_id],
     });
-  });
+    return projects.rows;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const updateProject = (id, name, color, is_favorite) => {

@@ -1,15 +1,15 @@
 import db from "../database/db.js";
 
-const dbRun = (query, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.run(query, params, function (err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(this); // Provides metadata like lastID or changes
-      }
+const dbRun = async (query, params = []) => {
+  try {
+    const result = await db.execute({
+      sql: query,
+      args: params,
     });
-  });
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export default dbRun;

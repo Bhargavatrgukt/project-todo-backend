@@ -5,7 +5,8 @@ export const createProject = asyncHandler(async (req, res) => {
   const { name, color, is_favorite } = req.body;
   const user_id = req.user_id;
   const result = await Project.createProject(name, color, is_favorite, user_id);
-  res.status(201).json({ id: result.lastID });
+  console.log(result);
+  res.status(201).json({ id: Number(result.lastInsertRowid) });
 });
 
 export const getProjects = asyncHandler(async (req, res) => {
